@@ -14,3 +14,12 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore all Ubuntu backup files
+*~
+
+# Ignore security token
+.secret
+
+# Ignore yml db
+./config/database.yml
