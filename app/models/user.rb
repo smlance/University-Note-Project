@@ -1,6 +1,13 @@
 class User < ActiveRecord::Base
-  # Use the before_save callback to ensure email uniqueness
+  # Use the before_save callback to ensure email uniqueness.
+  # This occurs before a user is saved to the database.
+  # (Could potentially occur more than once, e.g., if the user
+  # changes his email address.)
   before_save { self.email = email.downcase }
+
+  # Use the before_create callback to make sure a remember_token
+  # is created for the user. (Done when user is created.)
+  before_create :create_remember_token
 
   # Validate the username
   validates :name, presence: true, length: { maximum: 50 }
@@ -21,5 +28,24 @@ class User < ActiveRecord::Base
 
   # Validate the password
   validates :password, length: { minimum: 8 }
+
+
+  # If methods are prefixed with User., they are class methods
+  # (they do not pertain to a particular user instance / object,
+  # but can be used anywhere by any user object, or any external
+  # object?)
+  def User.new_remember_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def User.digest(token)
+    Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  private
+
+    def create_remember_token
+      self.remember_token = User.digest(User.new_remember_token)
+    end
 
 end

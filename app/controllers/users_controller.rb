@@ -20,6 +20,8 @@ class UsersController < ApplicationController
       # before redirecting to the user action, we allow the flash
       # message to be rendered in the view.
 
+      # Sign the user in upon creation (makes a new session)
+      sign_in @user
       flash[:success] = "Welcome to U-Note!"
       redirect_to @user
     else

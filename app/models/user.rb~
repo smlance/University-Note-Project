@@ -15,4 +15,11 @@ class User < ActiveRecord::Base
   # format: { attribute: value }
   # the `format` is assumed by Rails to be true.
 
+  # Make sure typed passwords are only virtual and that persisted
+  # passwords (those saved to the db) are secure (digested)
+  has_secure_password
+
+  # Validate the password
+  validates :password, length: { minimum: 8 }
+
 end

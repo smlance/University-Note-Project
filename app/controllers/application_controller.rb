@@ -3,7 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  # def full_title
-  #   "Full Title"
-  # end
+  include SessionsHelper
+  # We include the SessionsHelper so that methods defined in it
+  # are accessible at any point in the application.
+
 end
