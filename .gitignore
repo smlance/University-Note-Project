@@ -15,11 +15,14 @@
 /log/*.log
 /tmp
 
-# Ignore all Ubuntu backup files
+# Ignore other unneeded files.
+doc/
+*.swp
 *~
-
-# Ignore security token
-.secret
+.project
+.DS_Store
+.idea
+bundler_stubs/
 
 # Ignore yml db
 ./config/database.yml
