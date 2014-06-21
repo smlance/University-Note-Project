@@ -12,7 +12,10 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       # Sign in successful
       sign_in user
-      redirect_to user
+      redirect_back_or user
+      # If the user tried to get somewhere originally because he
+      # wasn't signed in, then bring him back there; otherwise,
+      # just take him to his profile page.
     else
       # Sign in unsuccessful
       # Use `flash.now` to make the flash persist only for the 
