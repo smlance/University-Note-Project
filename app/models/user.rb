@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  has_many :microposts
+
   # Use the before_save callback to ensure email uniqueness.
   # This occurs before a user is saved to the database.
   # (Could potentially occur more than once, e.g., if the user

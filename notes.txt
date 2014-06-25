@@ -1,0 +1,5 @@
+Notes
+
+- Add files to .gitignore at start of project
+- Make sure key is dynamically / randomly generated and not present in the secret token file
+- To set up testing, install guard and spork and configure the Guardfile so that running `guard` automatically 
