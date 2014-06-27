@@ -53,9 +53,16 @@ describe "Authentication" do
       # goes to after signing in, so the below tests apply to that
       # page (since the valid signin applies in the `before` block).
       it { should have_title user.name }
-      it { should have_link ('Profile', href: user_path(user)) }
-      it { should have_link ('Sign out', href: signout_path) }
-      it { should_not have_link ('Sign in', href: signin_path) }
+      it { should have_link('Profile', href: user_path(user)) }
+      it { should have_link('Sign out', href: signout_path) }
+      it { should_not have_link('Sign in', href: signin_path) }
+
+      describe "followed by signout" do
+        before { click_link "Sign out" }
+        it { should have_link 'Sign in'}
+        # If we have successfully signed out, then there should be a
+        # link that allows us to sign in.
+      end
     end
   end
   
