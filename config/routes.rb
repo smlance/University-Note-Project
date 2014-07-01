@@ -4,6 +4,7 @@ Unote::Application.routes.draw do
   # specified restrictively with `only:`.
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :microposts, only: [:create, :destroy]
 
   # Root site path (directs to static_pages's home action)
   root 'static_pages#home'

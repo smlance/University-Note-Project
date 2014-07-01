@@ -1,0 +1,18 @@
+namespace :db do
+  desc "Reset the database; to be used for development and not production"
+  task :devreset => :environment do
+# if Rails.env.development?
+      File.delete("db/schema.rb")
+      Rake::Task["db:drop"].execute
+      Rake::Task["db:create"].execute
+      Rake::Task["db:migrate"].execute("RAILS_ENV=test")
+#      Rake::Task["db:seed"].execute
+#    end	
+
+    if !Rails.env.test?
+      Rake::Task["db:populate"].execute
+    end
+  end
+
+  # See sample_data.rake for the db:populate task definition
+end

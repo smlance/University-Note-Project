@@ -23,6 +23,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def new
@@ -52,6 +53,7 @@ class UsersController < ApplicationController
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
@@ -85,21 +87,8 @@ class UsersController < ApplicationController
     end
 
     # Before filters
-    
-    def signed_in_user
-      unless signed_in?
-        store_location
-        # Store the location the user intended to go to if not
-        # signed in (we will redirect him there later)
-        redirect_to signin_url,
-                    notice: "Please sign in." unless signed_in?
-        # This notice is a flash. This whole line is short for:
-        # unless signed_in?
-        #   flash[:notice] = "Please sign in."
-        #   redirect_to signin_url
-        # end
-      end
-    end
+
+    # singed_in_user is now in helpers/sessions_helper.rb
 
     def correct_user
       @user = User.find(params[:id])

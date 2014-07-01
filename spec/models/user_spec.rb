@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User do
   before do
     @user = User.new(name: "Example User",
-                     email: "Foo@Bar.com",
+                     email: "Foofdfd@Bddfdfar.com",
                      password: "foobarss",
                      password_confirmation: "foobarss")
   end
@@ -17,6 +17,8 @@ describe User do
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:admin) }
+  it { should respond_to(:microposts) }
   it { should be_valid }
   # What we provided above / did above in the before block
   # should be valid.
@@ -97,6 +99,36 @@ describe User do
     # The above line is equivalent to:
     # `it { expect(@user.remember_token).not_to be_blank }`
     # because of the `its` method.
+  end
+
+  describe "micropost associations" do
+    before { @user.save }
+    let!(:older_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+    end
+
+    # Note that let is lazy-evaluated: it is not evaluated until the first time
+    # the method it defines is invoked. You can use let! to force the method's
+    # invocation before each example.'
+    # (https://www.relishapp.com/rspec/rspec-core/docs/helper-methods/let-and-let)
+
+    it "should have the right microposts in the right order" do
+      expect(@user.microposts.to_a).to eq [newer_micropost, older_micropost]
+    end
+
+    it "should destroy associated microposts" do
+      microposts = @user.microposts.to_a
+      # The `to_a` ensures that even after we destroy the user from
+      # the database, the array contains the once-existing microposts.
+      @user.destroy
+      expect(microposts).not_to be_empty
+      microposts.each do |micropost|
+        expect(Micropost.where(id: micropost.id)).to be_empty
+      end
+    end
   end
 
 end

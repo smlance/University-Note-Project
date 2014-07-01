@@ -65,5 +65,49 @@ describe "Authentication" do
       end
     end
   end
+
+  describe "authorization" do
+    describe "for non-signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+
+      describe "in the Microposts controller" do
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { expect(response).to redirect_to(signup_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+      end
+
+      describe "in the Users controller" do
+        describe "visiting the edit page" do
+          before { visit edit_user_path(user) }
+          it { should have_title('Sign in') }
+          # So, FG has created a user variable which we have access
+          # to in this test. What is going on is that the test tries
+          # to get us -- a person who has not yet signed in --
+          # to visit the `edit` page for this particular user's
+          # profile. It's important that we haven't yet signed in,
+          # which we specify as necessary in some other tests
+          # (e.g., check user_pages_spec.rb).
+          # Hence, this is a failing test.
+        end
+
+        describe "submitting to the update action" do
+          before { patch user_path(user) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+        # An even stronger test -- if we try to bypass the page
+        # and just submit a patch request* to the server, the server
+        # knows we are not signed in, so it redirects us to the
+        # signin page.
+        # * for the user FG made above.
+      end
+    end
+  end
   
 end

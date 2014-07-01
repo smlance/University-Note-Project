@@ -6,5 +6,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   # We include the SessionsHelper so that methods defined in it
   # are accessible at any point in the application.
+  # That is, they are available to all of the controllers.
+  # (Normally, helpers are just available to viws.)
 
 end

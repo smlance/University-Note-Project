@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
-  has_many :microposts
+  has_many :microposts, dependent: :destroy
+  # the `dependent: :destroy` option "arranges for the dependent
+  # microposts (i.e., the ones belonging to the given user) to be
+  # destroyed when the user itself is destroyed" (Hartl)
 
   # Use the before_save callback to ensure email uniqueness.
   # This occurs before a user is saved to the database.
